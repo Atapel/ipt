@@ -17,14 +17,17 @@
   body {
     @apply bg-cream-50 text-ink-900 antialiased;
     background-image:
-      radial-gradient(1200px 600px at 80% -10%, rgba(235, 188, 168, 0.25), transparent 60%),
-      radial-gradient(900px 500px at -10% 30%, rgba(191, 205, 177, 0.30), transparent 60%);
+      radial-gradient(1200px 600px at 80% -10%, rgba(235, 188, 168, 0.30), transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, rgba(191, 205, 177, 0.35), transparent 60%),
+      radial-gradient(700px 700px at 50% 110%, rgba(216, 135, 112, 0.18), transparent 60%);
     background-attachment: fixed;
   }
 
   h1, h2, h3 {
     @apply font-display tracking-tight;
   }
+
+  ::selection { background: #DDE5D5; color: #1F2A22; }
 }
 
 @layer components {
@@ -33,10 +36,81 @@
   }
 
   .pill {
-    @apply inline-flex items-center gap-2 rounded-full bg-sage-100 px-3 py-1 text-xs font-medium uppercase tracking-wider text-sage-700;
+    @apply inline-flex items-center gap-2 rounded-full bg-sage-100/70 backdrop-blur px-3 py-1 text-xs font-medium uppercase tracking-wider text-sage-700 ring-1 ring-sage-200/60;
   }
 
   .link-underline {
     @apply relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-current after:transition-transform hover:after:origin-left hover:after:scale-x-100;
   }
+
+  .text-gradient {
+    background: linear-gradient(120deg, #3F5235 0%, #6B855B 35%, #C66B53 75%, #A85540 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-pan 9s ease-in-out infinite;
+  }
+
+  .glass {
+    @apply bg-cream-50/70 backdrop-blur-md ring-1 ring-cream-200/70;
+  }
+
+  .noise {
+    position: relative;
+  }
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/></svg>");
+  }
+
+  .shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.9s ease;
+    pointer-events: none;
+  }
+  .shine:hover::before { left: 150%; }
+}
+
+@layer utilities {
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+}
+
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes blob-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(107, 133, 91, 0.35); }
+  50% { box-shadow: 0 0 0 16px rgba(107, 133, 91, 0); }
 }
